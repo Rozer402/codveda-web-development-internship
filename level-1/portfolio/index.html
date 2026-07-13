@@ -4,10 +4,189 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aditya Bhusal | Portfolio</title>
+    <!-- Google Fonts - Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
     <script src="js/script.js" defer></script>
 </head>
 <body>
-    <!-- TODO: Add semantic portfolio sections (e.g., header, main containing hero, about, projects, and contact, followed by footer) -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="#home" class="logo">
+                <span class="logo-accent">&lt;</span>Aditya Bhusal<span class="logo-accent"> /&gt;</span>
+            </a>
+
+            <button class="hamburger-btn" aria-label="Toggle Navigation" aria-controls="nav-menu" aria-expanded="false">
+                <span class="hamburger-line line-1"></span>
+                <span class="hamburger-line line-2"></span>
+                <span class="hamburger-line line-3"></span>
+            </button>
+
+            <nav class="nav-menu" id="nav-menu">
+                <ul class="nav-links">
+                    <li><a href="#home" class="nav-link active">Home</a></li>
+                    <li><a href="#about" class="nav-link">About</a></li>
+                    <li><a href="#skills" class="nav-link">Skills</a></li>
+                    <li><a href="#projects" class="nav-link">Projects</a></li>
+                    <li><a href="#contact" class="nav-link">Contact</a></li>
+                </ul>
+                <a href="#resume" class="btn-resume">Resume</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="hero">
+            <div class="hero-container">
+                <div class="hero-content">
+                    <p class="greeting">Hi, I'm</p>
+                    <h1 class="main-heading">Aditya Bhusal</h1>
+                    <h2 class="subtitle">Full Stack Developer | MERN Stack | React | Node.js</h2>
+                    <p class="description">
+                        Passionate about crafting clean, user-centric interfaces and building robust web applications. I thrive on solving complex problems and turning innovative ideas into seamless digital experiences.
+                    </p>
+                    
+                    <div class="hero-buttons">
+                        <a href="#projects" class="btn btn-primary">View Projects</a>
+                        <a href="#contact" class="btn btn-secondary">Contact Me</a>
+                    </div>
+                    
+                    <div class="social-icons">
+                        <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" aria-label="Email"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+                
+                <div class="hero-image">
+                    <div class="profile-placeholder"></div>
+                </div>
+            </div>
+            
+            <a href="#about" class="scroll-indicator" aria-label="Scroll Down">
+                <span class="scroll-text">Scroll Down</span>
+                <i class="fas fa-arrow-down scroll-arrow"></i>
+            </a>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="about section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">About Me</h2>
+                    <p class="section-subtitle">Get to know me better.</p>
+                </div>
+                
+                <div class="about-grid">
+                    <div class="about-content">
+                        <p>
+                            I'm Aditya Bhusal, a Computer Science student with a strong interest in full-stack web development. I enjoy building responsive and user-friendly web applications using the MERN stack while continuously improving my backend development and system design skills.
+                        </p>
+                        <p>
+                            I believe the best way to learn is by building real projects. Through internships, hackathons, and personal projects, I focus on writing clean code, solving practical problems, and creating applications that are scalable, maintainable, and enjoyable to use.
+                        </p>
+                    </div>
+                    
+                    <div class="about-info-card">
+                        <ul class="info-list">
+                            <li><span class="info-label">Location:</span> Nepal</li>
+                            <li><span class="info-label">Education:</span> Bachelor of Engineering in Computer Science</li>
+                            <li><span class="info-label">Focus:</span> Full Stack Web Development</li>
+                            <li><span class="info-label">Tech Stack:</span> React, Node.js, Express, MongoDB, JavaScript</li>
+                            <li><span class="info-label">Current Goal:</span> Building production-ready web applications and continuously improving backend development and system design skills.</li>
+                            <li><span class="info-label">Availability:</span> Open to internships and software engineering opportunities.</li>
+                        </ul>
+                        
+                        <div class="card-buttons">
+                            <a href="#resume" class="btn btn-primary">Download Resume</a>
+                            <a href="#contact" class="btn btn-secondary">Contact Me</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="skills section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">My Skills</h2>
+                    <p class="section-subtitle">Technologies and tools I use to build robust applications.</p>
+                </div>
+                
+                <div class="skills-grid">
+                    <!-- Frontend -->
+                    <div class="skill-card">
+                        <h3 class="skill-category">
+                            <i class="fas fa-laptop-code"></i> Frontend
+                        </h3>
+                        <div class="skill-badges">
+                            <span class="badge">HTML5</span>
+                            <span class="badge">CSS3</span>
+                            <span class="badge">JavaScript</span>
+                            <span class="badge">React</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Backend -->
+                    <div class="skill-card">
+                        <h3 class="skill-category">
+                            <i class="fas fa-server"></i> Backend
+                        </h3>
+                        <div class="skill-badges">
+                            <span class="badge">Node.js</span>
+                            <span class="badge">Express.js</span>
+                            <span class="badge">REST APIs</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Database -->
+                    <div class="skill-card">
+                        <h3 class="skill-category">
+                            <i class="fas fa-database"></i> Database
+                        </h3>
+                        <div class="skill-badges">
+                            <span class="badge">MongoDB</span>
+                            <span class="badge">PostgreSQL</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Tools -->
+                    <div class="skill-card">
+                        <h3 class="skill-category">
+                            <i class="fas fa-tools"></i> Tools
+                        </h3>
+                        <div class="skill-badges">
+                            <span class="badge">Git</span>
+                            <span class="badge">GitHub</span>
+                            <span class="badge">VS Code</span>
+                            <span class="badge">Postman</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Currently Learning -->
+                    <div class="skill-card">
+                        <h3 class="skill-category">
+                            <i class="fas fa-book-reader"></i> Currently Learning
+                        </h3>
+                        <div class="skill-badges">
+                            <span class="badge badge-outline">System Design</span>
+                            <span class="badge badge-outline">TypeScript</span>
+                            <span class="badge badge-outline">Next.js</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TODO: Add portfolio sections: Projects, Contact -->
+    </main>
+
+    <!-- TODO: Add footer -->
 </body>
 </html>
