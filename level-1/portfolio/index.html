@@ -425,12 +425,65 @@
     </main>
 
     <footer class="footer" role="contentinfo">
-        <div class="footer-inner">
-            <p class="footer-copy">&copy; <span id="footer-year"></span> Aditya Bhusal. All rights reserved.</p>
-            <div class="footer-socials" aria-label="Social links">
-                <a href="https://github.com/adityabhusal" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile"><i class="fab fa-github"></i></a>
-                <a href="https://linkedin.com/in/adityabhusal" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile"><i class="fab fa-linkedin"></i></a>
-                <a href="mailto:adityabhusal@example.com" aria-label="Send email"><i class="fas fa-envelope"></i></a>
+        <!-- Main footer body -->
+        <div class="footer-body">
+            <div class="footer-container">
+
+                <!-- Col 1 — Brand -->
+                <div class="footer-brand">
+                    <a href="#home" class="footer-logo" aria-label="Back to top">
+                        <span class="logo-accent">&lt;</span>Aditya Bhusal<span class="logo-accent"> /&gt;</span>
+                    </a>
+                    <p class="footer-tagline">Building modern web experiences with clean code.</p>
+                </div>
+
+                <!-- Col 2 — Navigation -->
+                <nav class="footer-nav" aria-label="Footer navigation">
+                    <h3 class="footer-heading">Navigation</h3>
+                    <ul class="footer-nav-list">
+                        <li><a href="#home"     class="footer-nav-link">Home</a></li>
+                        <li><a href="#about"    class="footer-nav-link">About</a></li>
+                        <li><a href="#skills"   class="footer-nav-link">Skills</a></li>
+                        <li><a href="#projects" class="footer-nav-link">Projects</a></li>
+                        <li><a href="#contact"  class="footer-nav-link">Contact</a></li>
+                    </ul>
+                </nav>
+
+                <!-- Col 3 — Socials -->
+                <div class="footer-social-col">
+                    <h3 class="footer-heading">Connect</h3>
+                    <ul class="footer-social-list" aria-label="Social media links">
+                        <li>
+                            <a href="https://github.com/adityabhusal" target="_blank" rel="noopener noreferrer" class="footer-social-link" aria-label="GitHub profile">
+                                <i class="fab fa-github" aria-hidden="true"></i>
+                                <span>GitHub</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://linkedin.com/in/adityabhusal" target="_blank" rel="noopener noreferrer" class="footer-social-link" aria-label="LinkedIn profile">
+                                <i class="fab fa-linkedin" aria-hidden="true"></i>
+                                <span>LinkedIn</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="mailto:adityabhusal@example.com" class="footer-social-link" aria-label="Send an email">
+                                <i class="fas fa-envelope" aria-hidden="true"></i>
+                                <span>Email</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Divider + Bottom bar -->
+        <div class="footer-bottom-wrapper">
+            <div class="footer-container">
+                <hr class="footer-divider" aria-hidden="true">
+                <p class="footer-copy">
+                    &copy; <span id="footer-year"></span> Aditya Bhusal. All Rights Reserved.
+                </p>
             </div>
         </div>
     </footer>
