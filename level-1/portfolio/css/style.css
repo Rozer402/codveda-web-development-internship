@@ -67,6 +67,25 @@ ul {
     border-radius: 2px;
 }
 
+/* Skip-to-content link — hidden until focused by keyboard */
+.skip-link {
+    position: absolute;
+    top: -100%;
+    left: 1rem;
+    padding: 0.6rem 1.2rem;
+    background: var(--accent-color);
+    color: var(--bg-color);
+    font-weight: 600;
+    font-size: 0.9rem;
+    border-radius: 0 0 8px 8px;
+    z-index: 9999;
+    transition: top 0.2s;
+}
+
+.skip-link:focus {
+    top: 0;
+}
+
 /* =============================================================
    UTILITY CLASSES
    ============================================================= */
@@ -552,17 +571,6 @@ ul {
     border-color: var(--primary-color);
 }
 
-.badge-outline {
-    background: transparent;
-    border: 1px dashed var(--text-muted);
-    color: var(--text-muted);
-}
-
-.badge-outline:hover {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: var(--text-color);
-    color: var(--text-color);
-}
 
 /* =============================================================
    PROJECTS SECTION

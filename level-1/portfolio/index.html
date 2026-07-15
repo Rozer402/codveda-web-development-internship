@@ -48,7 +48,10 @@
 </head>
 
 <body>
-    <header class="header">
+    <!-- Skip to main content (keyboard accessibility) -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <header class="header" role="banner">
         <div class="nav-container">
             <a href="#home" class="logo">
                 <span class="logo-accent">&lt;</span>Aditya Bhusal<span class="logo-accent"> /&gt;</span>
@@ -60,7 +63,7 @@
                 <span class="hamburger-line line-3"></span>
             </button>
 
-            <nav class="nav-menu" id="nav-menu">
+            <nav class="nav-menu" id="nav-menu" aria-label="Primary navigation">
                 <ul class="nav-links">
                     <li><a href="#home" class="nav-link active">Home</a></li>
                     <li><a href="#about" class="nav-link">About</a></li>
@@ -150,7 +153,7 @@
                         </ul>
 
                         <div class="card-buttons">
-                            <a href="#" class="btn btn-primary">Download Resume</a>
+                            <a href="#" class="btn btn-primary" aria-disabled="true" tabindex="-1">Download Resume</a>
                             <a href="#contact" class="btn btn-secondary">Contact Me</a>
                         </div>
                     </article>
@@ -379,7 +382,7 @@
                         <ul class="contact-details" aria-label="Contact details">
                             <li class="contact-detail-item">
                                 <span class="contact-icon" aria-hidden="true">
-                                    <i class="fas fa-envelope"></i>
+                                    <i class="fas fa-envelope" aria-hidden="true"></i>
                                 </span>
                                 <div class="contact-detail-body">
                                     <span class="contact-detail-label">Email</span>
@@ -391,7 +394,7 @@
 
                             <li class="contact-detail-item">
                                 <span class="contact-icon" aria-hidden="true">
-                                    <i class="fab fa-linkedin"></i>
+                                    <i class="fab fa-linkedin" aria-hidden="true"></i>
                                 </span>
                                 <div class="contact-detail-body">
                                     <span class="contact-detail-label">LinkedIn</span>
@@ -404,7 +407,7 @@
 
                             <li class="contact-detail-item">
                                 <span class="contact-icon" aria-hidden="true">
-                                    <i class="fab fa-github"></i>
+                                    <i class="fab fa-github" aria-hidden="true"></i>
                                 </span>
                                 <div class="contact-detail-body">
                                     <span class="contact-detail-label">GitHub</span>
@@ -417,7 +420,7 @@
 
                             <li class="contact-detail-item">
                                 <span class="contact-icon" aria-hidden="true">
-                                    <i class="fas fa-map-marker-alt"></i>
+                                    <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
                                 </span>
                                 <div class="contact-detail-body">
                                     <span class="contact-detail-label">Location</span>
