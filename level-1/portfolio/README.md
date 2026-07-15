@@ -106,13 +106,13 @@ npx serve .
 3. Framework preset: **Other** (static).
 4. Click **Deploy**.
 
-> Before deploying, replace all `your-domain.com` placeholders in `index.html`, `robots.txt`, and `sitemap.xml` with your actual domain.
+> Before deploying, verify all URLs and domains are configured properly.
 
 ---
 
 ## Before Going Live — Checklist
 
-- [ ] Replace `https://your-domain.com/` in `index.html`, `robots.txt`, `sitemap.xml`
+- [x] Replace domain placeholders in `index.html`, `robots.txt`, `sitemap.xml`
 - [ ] Replace `YOUR_USERNAME` GitHub/LinkedIn links with real handles
 - [ ] Replace `your@email.com` with real email
 - [ ] Add `favicon.ico` (32×32 px)
