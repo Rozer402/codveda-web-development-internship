@@ -78,6 +78,7 @@ body.dark-theme {
 
 html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
 }
 
 body {
@@ -86,6 +87,8 @@ body {
     background-color: var(--bg-color);
     color: var(--text-muted);
     line-height: 1.6;
+    overflow-x: hidden;
+    overflow-wrap: break-word;
     transition: background-color var(--trans-normal), color var(--trans-normal);
 }
 
@@ -325,6 +328,8 @@ button, input, textarea {
         top: -100%;
         left: 0;
         width: 100%;
+        max-height: calc(100vh - 70px);
+        overflow-y: auto;
         background-color: var(--card-bg);
         padding: 3rem 0;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -934,6 +939,48 @@ button, input, textarea {
 /* ==========================================================================
    15. MEDIA QUERIES (Responsive Grid)
    ========================================================================== */
+
+/* Small Mobile Devices (320px, 375px, 425px) */
+@media screen and (max-width: 425px) {
+    :root {
+        --fs-h1: 2rem;
+        --fs-h2: 1.75rem;
+        --fs-h3: 1.15rem;
+        --section-pad: 4rem 0;
+    }
+    
+    .container {
+        padding: 0 1rem;
+    }
+
+    .hero__buttons {
+        width: 100%;
+    }
+    
+    .btn {
+        width: 100%;
+        padding: 0.85rem 1.25rem;
+    }
+    
+    .statistics__grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .footer__social {
+        width: 100%;
+        text-align: center;
+    }
+    
+    .social__links {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .footer__legal {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
 
 /* Tablet Devices */
 @media screen and (min-width: 768px) {
