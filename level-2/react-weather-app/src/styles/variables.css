@@ -1,0 +1,56 @@
+:root {
+  /* Brand Typography */
+  --font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* Color Palette — Light Theme */
+  --color-primary: #3B82F6;
+  --color-primary-hover: #1D4ED8;
+  --color-primary-alpha: rgba(59, 130, 246, 0.08);
+  --color-secondary: #10B981;
+  --color-danger: #EF4444;
+
+  /* Premium Background Gradients */
+  --color-background-start: #F8FAFC;
+  --color-background-end: #E2E8F0;
+  --color-surface: rgba(255, 255, 255, 0.8);
+  --color-border: rgba(226, 232, 240, 0.8);
+  --color-text: #0F172A;
+  --color-text-muted: #475569;
+
+  /* Glassmorphism details */
+  --glass-bg: rgba(255, 255, 255, 0.45);
+  --glass-border: rgba(255, 255, 255, 0.6);
+  --glass-blur: blur(16px);
+
+  /* Transitions */
+  --transition-normal: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-fast: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Border Radii */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 24px;
+  --radius-full: 9999px;
+
+  /* Soft Ambient Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.02);
+  --shadow-md: 0 10px 20px -5px rgba(0, 0, 0, 0.03), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+  --shadow-lg: 0 20px 40px -10px rgba(0, 0, 0, 0.04), 0 10px 15px -5px rgba(0, 0, 0, 0.02);
+}
+
+[data-theme="dark"] {
+  /* Color Palette — Dark Theme */
+  --color-primary: #60A5FA;
+  --color-primary-hover: #3B82F6;
+  --color-primary-alpha: rgba(96, 165, 250, 0.12);
+  --color-background-start: #0B0F19;
+  --color-background-end: #171E2E;
+  --color-surface: rgba(30, 41, 59, 0.7);
+  --color-border: rgba(51, 65, 85, 0.5);
+  --color-text: #F8FAFC;
+  --color-text-muted: #94A3B8;
+
+  /* Glassmorphism details */
+  --glass-bg: rgba(15, 23, 42, 0.45);
+  --glass-border: rgba(255, 255, 255, 0.05);
+}
