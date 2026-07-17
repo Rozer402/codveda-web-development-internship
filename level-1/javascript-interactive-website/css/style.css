@@ -19,14 +19,14 @@
     --shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
     --shadow-hover: 0 15px 40px rgba(0, 0, 0, 0.12);
     
-    /* Typography */
+    /* Typography using clamp for fluid responsiveness */
     --font-main: 'Poppins', sans-serif;
     
-    --fs-h1: 2.5rem;
-    --fs-h2: 2rem;
-    --fs-h3: 1.25rem;
-    --fs-body: 1rem;
-    --fs-small: 0.875rem;
+    --fs-h1: clamp(2.5rem, 5vw, 4rem);
+    --fs-h2: clamp(1.75rem, 4vw, 2.5rem);
+    --fs-h3: clamp(1.15rem, 2vw, 1.25rem);
+    --fs-body: clamp(0.938rem, 1vw, 1rem);
+    --fs-small: clamp(0.813rem, 1vw, 0.875rem);
     
     --fw-light: 300;
     --fw-regular: 400;
@@ -36,7 +36,7 @@
     --fw-extrabold: 800;
     
     /* Spacing */
-    --section-pad: 5rem 0;
+    --section-pad: clamp(4rem, 8vw, 7rem) 0;
     --container-pad: 0 1.5rem;
     
     /* Transitions */
@@ -70,7 +70,7 @@ body.dark-theme {
 /* ==========================================================================
    3. BASE STYLES & RESET
    ========================================================================== */
-* {
+*, *::before, *::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -90,6 +90,12 @@ body {
     overflow-x: hidden;
     overflow-wrap: break-word;
     transition: background-color var(--trans-normal), color var(--trans-normal);
+}
+
+/* Accessibility Focus States */
+:focus-visible {
+    outline: 2px dashed var(--primary);
+    outline-offset: 4px;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -126,6 +132,7 @@ button, input, textarea {
    ========================================================================== */
 .container {
     max-width: 1200px;
+    width: 100%;
     margin-inline: auto;
     padding: var(--container-pad);
 }
@@ -140,7 +147,7 @@ button, input, textarea {
 
 .section__header {
     text-align: center;
-    margin-bottom: 4rem;
+    margin-bottom: clamp(2rem, 5vw, 4rem);
 }
 
 .section__title {
@@ -189,13 +196,13 @@ button, input, textarea {
     height: 4px;
     background: linear-gradient(to right, var(--primary), var(--secondary));
     z-index: calc(var(--z-fixed) + 10);
-    transition: width 0.1s;
+    will-change: width;
 }
 
 /* Scroll Up Button */
 .scroll-up {
     position: fixed;
-    right: 2rem;
+    right: 1.5rem;
     bottom: -20%;
     background: var(--primary);
     color: #fff;
@@ -209,8 +216,9 @@ button, input, textarea {
     z-index: var(--z-tooltip);
     opacity: 0;
     visibility: hidden;
-    transition: all var(--trans-normal);
+    transition: transform var(--trans-normal), opacity var(--trans-normal), visibility var(--trans-normal);
     box-shadow: 0 4px 12px rgba(var(--hue), 80%, 60%, 0.4);
+    transform: translateY(20px);
 }
 
 .scroll-up:hover {
@@ -219,9 +227,10 @@ button, input, textarea {
 }
 
 .show-scroll {
-    bottom: 3rem;
+    bottom: 2rem;
     opacity: 1;
     visibility: visible;
+    transform: translateY(0);
 }
 
 /* ==========================================================================
@@ -232,11 +241,11 @@ button, input, textarea {
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    padding: 1rem 2rem;
+    padding: clamp(0.75rem, 2vw, 1rem) clamp(1.5rem, 4vw, 2rem);
     border-radius: 3rem;
     font-weight: var(--fw-medium);
     cursor: pointer;
-    transition: all var(--trans-normal);
+    transition: transform var(--trans-normal), box-shadow var(--trans-normal), border-color var(--trans-normal), color var(--trans-normal);
 }
 
 .btn--primary {
@@ -276,10 +285,9 @@ button, input, textarea {
     top: 0;
     left: 0;
     z-index: var(--z-fixed);
-    transition: all var(--trans-normal);
+    transition: background-color var(--trans-normal), backdrop-filter var(--trans-normal), box-shadow var(--trans-normal);
 }
 
-/* Glassmorphism Class (Added via JS on scroll usually) */
 .header.scroll-header {
     background: var(--glass-bg);
     backdrop-filter: blur(16px);
@@ -315,31 +323,42 @@ button, input, textarea {
     color: var(--text-main);
     cursor: pointer;
     transition: color var(--trans-normal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
 }
 
 .theme-toggle:hover, .nav__toggle:hover {
     color: var(--primary);
+    background: rgba(var(--hue), 80%, 60%, 0.1);
 }
 
-/* Mobile Nav */
+/* Mobile Nav Overlay */
 @media screen and (max-width: 991px) {
     .nav {
         position: fixed;
-        top: -100%;
-        left: 0;
+        top: 0;
+        right: 0;
         width: 100%;
-        max-height: calc(100vh - 70px);
-        overflow-y: auto;
+        height: 100vh;
         background-color: var(--card-bg);
-        padding: 3rem 0;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        transition: top var(--trans-normal);
-        z-index: calc(var(--z-fixed) - 1);
-        border-radius: 0 0 1.5rem 1.5rem;
+        padding: 5rem 2rem;
+        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+        transform: translateX(100%);
+        transition: transform var(--trans-normal) cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: var(--z-fixed);
+        overflow-y: auto;
     }
     
     .show-menu {
-        top: 70px; /* Below header */
+        transform: translateX(0);
+    }
+
+    .header {
+        z-index: calc(var(--z-fixed) + 1);
     }
 }
 
@@ -355,6 +374,13 @@ button, input, textarea {
     color: var(--text-main);
     transition: color var(--trans-normal);
     position: relative;
+    font-size: 1.25rem;
+}
+
+@media screen and (min-width: 992px) {
+    .nav__link {
+        font-size: var(--fs-body);
+    }
 }
 
 .nav__link::after {
@@ -383,19 +409,20 @@ button, input, textarea {
     min-height: 100vh;
     display: flex;
     align-items: center;
-    padding-top: 100px; /* Offset header */
+    padding-top: 100px;
     position: relative;
     overflow: hidden;
 }
 
-/* Background Gradients */
 .hero::before {
     content: '';
     position: absolute;
     top: -20%;
     right: -10%;
-    width: 500px;
-    height: 500px;
+    width: 50vw;
+    height: 50vw;
+    max-width: 500px;
+    max-height: 500px;
     background: radial-gradient(circle, rgba(var(--hue), 80%, 60%, 0.15) 0%, transparent 70%);
     border-radius: 50%;
     z-index: var(--z-back);
@@ -407,8 +434,10 @@ button, input, textarea {
     position: absolute;
     bottom: -10%;
     left: -10%;
-    width: 400px;
-    height: 400px;
+    width: 40vw;
+    height: 40vw;
+    max-width: 400px;
+    max-height: 400px;
     background: radial-gradient(circle, rgba(280, 80%, 60%, 0.1) 0%, transparent 70%);
     border-radius: 50%;
     z-index: var(--z-back);
@@ -425,7 +454,7 @@ button, input, textarea {
 }
 
 .hero__title {
-    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-size: var(--fs-h1);
     font-weight: var(--fw-extrabold);
     margin-bottom: 1.5rem;
     background: linear-gradient(135deg, var(--primary), var(--secondary));
@@ -446,6 +475,26 @@ button, input, textarea {
     flex-direction: column;
     gap: 1rem;
     justify-content: center;
+    width: 100%;
+}
+
+@media screen and (min-width: 425px) {
+    .hero__buttons {
+        flex-direction: row;
+        width: auto;
+    }
+}
+
+.hero__illustration {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero-image {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
 }
 
 /* ==========================================================================
@@ -463,8 +512,9 @@ button, input, textarea {
     border-radius: 1.5rem;
     border: 1px solid var(--border-color);
     box-shadow: var(--shadow);
-    transition: all var(--trans-normal);
+    transition: transform var(--trans-normal), box-shadow var(--trans-normal), border-color var(--trans-normal);
     text-align: center;
+    will-change: transform;
 }
 
 .feature__card:hover {
@@ -485,7 +535,7 @@ button, input, textarea {
     justify-content: center;
     font-size: 2rem;
     margin-bottom: 1.5rem;
-    transition: all var(--trans-normal);
+    transition: transform var(--trans-normal), background-color var(--trans-normal), color var(--trans-normal);
 }
 
 .feature__card:hover .feature__icon {
@@ -511,11 +561,21 @@ button, input, textarea {
 
 .slider__track {
     display: flex;
-    transition: transform var(--trans-normal);
+    transition: transform var(--trans-slow) cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
 }
 
 .slider__slide {
     min-width: 100%;
+    flex: 0 0 100%;
+}
+
+.slider__image {
+    width: 100%;
+    height: 300px;
+    object-fit: contain;
+    background-color: var(--card-bg);
+    padding: 1.5rem;
 }
 
 .slider__button {
@@ -533,7 +593,7 @@ button, input, textarea {
     justify-content: center;
     cursor: pointer;
     border: 1px solid var(--border-color);
-    transition: all var(--trans-fast);
+    transition: background-color var(--trans-fast), color var(--trans-fast), border-color var(--trans-fast);
 }
 
 .slider__button:hover {
@@ -555,12 +615,12 @@ button, input, textarea {
 }
 
 .dot {
-    width: 10px;
-    height: 10px;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.5);
     cursor: pointer;
-    transition: var(--trans-fast);
+    transition: transform var(--trans-fast), background-color var(--trans-fast);
 }
 
 .dot.active {
@@ -573,8 +633,14 @@ button, input, textarea {
    ========================================================================== */
 .statistics__grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
     gap: 2rem;
+}
+
+@media screen and (min-width: 425px) {
+    .statistics__grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 .stat__item {
@@ -598,7 +664,7 @@ button, input, textarea {
 }
 
 .stat__number {
-    font-size: 2.5rem;
+    font-size: var(--fs-h1);
     font-weight: var(--fw-bold);
     color: var(--text-main);
     margin-bottom: 0.5rem;
@@ -622,11 +688,13 @@ button, input, textarea {
 
 .testimonials__track {
     display: flex;
-    transition: transform var(--trans-normal);
+    transition: transform var(--trans-slow) cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
 }
 
 .testimonial__card {
     min-width: 100%;
+    flex: 0 0 100%;
     background: var(--card-bg);
     padding: 3rem 2rem;
     border-radius: 1.5rem;
@@ -643,7 +711,7 @@ button, input, textarea {
 }
 
 .testimonial__text {
-    font-size: 1.1rem;
+    font-size: var(--fs-body);
     font-style: italic;
     margin-bottom: 2rem;
     color: var(--text-main);
@@ -674,6 +742,7 @@ button, input, textarea {
 
 .author__name {
     font-size: var(--fs-body);
+    font-weight: var(--fw-medium);
 }
 
 .author__role {
@@ -700,7 +769,7 @@ button, input, textarea {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: var(--trans-fast);
+    transition: background-color var(--trans-fast), color var(--trans-fast), border-color var(--trans-fast);
 }
 
 .carousel__button:hover {
@@ -714,6 +783,7 @@ button, input, textarea {
    ========================================================================== */
 .accordion {
     max-width: 800px;
+    width: 100%;
     margin-inline: auto;
     display: flex;
     flex-direction: column;
@@ -725,7 +795,7 @@ button, input, textarea {
     border: 1px solid var(--border-color);
     border-radius: 0.75rem;
     overflow: hidden;
-    transition: var(--trans-normal);
+    transition: border-color var(--trans-normal);
 }
 
 .accordion__item:hover {
@@ -741,7 +811,8 @@ button, input, textarea {
     cursor: pointer;
     background: transparent;
     text-align: left;
-    transition: var(--trans-normal);
+    transition: color var(--trans-normal);
+    color: var(--text-main);
 }
 
 .accordion__title {
@@ -759,6 +830,7 @@ button, input, textarea {
     max-height: 0;
     overflow: hidden;
     transition: max-height var(--trans-normal);
+    visibility: hidden;
 }
 
 .accordion__text {
@@ -772,6 +844,10 @@ button, input, textarea {
 
 .accordion__item.active .accordion__header {
     color: var(--primary);
+}
+
+.accordion__item.active .accordion__content {
+    visibility: visible;
 }
 
 /* ==========================================================================
@@ -799,6 +875,7 @@ button, input, textarea {
     align-items: center;
     justify-content: center;
     font-size: 1.25rem;
+    flex-shrink: 0;
 }
 
 .contact__info-title {
@@ -808,7 +885,7 @@ button, input, textarea {
 
 .contact__form {
     background: var(--card-bg);
-    padding: 2.5rem;
+    padding: clamp(1.5rem, 5vw, 2.5rem);
     border-radius: 1.5rem;
     box-shadow: var(--shadow);
     border: 1px solid var(--border-color);
@@ -890,6 +967,7 @@ button, input, textarea {
 .social__links {
     display: flex;
     gap: 1rem;
+    flex-wrap: wrap;
 }
 
 .social__link {
@@ -902,7 +980,7 @@ button, input, textarea {
     align-items: center;
     justify-content: center;
     color: var(--text-main);
-    transition: all var(--trans-normal);
+    transition: background-color var(--trans-normal), color var(--trans-normal), border-color var(--trans-normal), transform var(--trans-normal);
 }
 
 .social__link:hover {
@@ -925,6 +1003,8 @@ button, input, textarea {
 .footer__legal {
     display: flex;
     gap: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .legal__link {
@@ -940,54 +1020,8 @@ button, input, textarea {
    15. MEDIA QUERIES (Responsive Grid)
    ========================================================================== */
 
-/* Small Mobile Devices (320px, 375px, 425px) */
-@media screen and (max-width: 425px) {
-    :root {
-        --fs-h1: 2rem;
-        --fs-h2: 1.75rem;
-        --fs-h3: 1.15rem;
-        --section-pad: 4rem 0;
-    }
-    
-    .container {
-        padding: 0 1rem;
-    }
-
-    .hero__buttons {
-        width: 100%;
-    }
-    
-    .btn {
-        width: 100%;
-        padding: 0.85rem 1.25rem;
-    }
-    
-    .statistics__grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .footer__social {
-        width: 100%;
-        text-align: center;
-    }
-    
-    .social__links {
-        justify-content: center;
-        flex-wrap: wrap;
-    }
-    
-    .footer__legal {
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-}
-
 /* Tablet Devices */
 @media screen and (min-width: 768px) {
-    .hero__buttons {
-        flex-direction: row;
-    }
-    
     .features__grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -1013,9 +1047,12 @@ button, input, textarea {
     .nav {
         position: static;
         width: auto;
+        height: auto;
         padding: 0;
         background: transparent;
         box-shadow: none;
+        transform: none;
+        overflow-y: visible;
     }
     
     .nav__list {
@@ -1049,19 +1086,15 @@ button, input, textarea {
     }
     
     .testimonial__card {
-        min-width: calc(100% / 2); /* Assuming JS handles multiple slides */
+        min-width: calc(100% / 2);
+        flex: 0 0 calc(100% / 2);
     }
 }
 
 /* Large Screens */
 @media screen and (min-width: 1200px) {
-    :root {
-        --fs-h1: 3.5rem;
-        --fs-h2: 2.5rem;
-        --section-pad: 7rem 0;
-    }
-    
     .testimonial__card {
-        min-width: calc(100% / 3); /* Assuming JS handles multiple slides */
+        min-width: calc(100% / 3);
+        flex: 0 0 calc(100% / 3);
     }
 }

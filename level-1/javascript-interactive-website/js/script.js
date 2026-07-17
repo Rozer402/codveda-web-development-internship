@@ -5,7 +5,7 @@
  */
 
 // ==========================================================================
-// 1. MOBILE NAVIGATION & 10. SMOOTH SCROLL NAVIGATION
+// 1. MOBILE NAVIGATION & SMOOTH SCROLL NAVIGATION
 // ==========================================================================
 const initNavigation = () => {
     try {
@@ -14,23 +14,47 @@ const initNavigation = () => {
         const navLinks = document.querySelectorAll('.nav__link');
         const header = document.getElementById('header');
 
+        const closeMenu = () => {
+            if (navMenu && navMenu.classList.contains('show-menu')) {
+                navMenu.classList.remove('show-menu');
+                if (navToggle) navToggle.setAttribute('aria-expanded', 'false');
+                document.body.style.overflow = '';
+            }
+        };
+
+        const openMenu = () => {
+            if (navMenu) {
+                navMenu.classList.add('show-menu');
+                if (navToggle) navToggle.setAttribute('aria-expanded', 'true');
+                document.body.style.overflow = 'hidden';
+            }
+        };
+
         // Toggle Menu
         if (navToggle && navMenu) {
-            navToggle.addEventListener('click', () => {
-                navMenu.classList.toggle('show-menu');
-                const isExpanded = navToggle.getAttribute('aria-expanded') === 'true';
-                navToggle.setAttribute('aria-expanded', !isExpanded);
+            navToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (navMenu.classList.contains('show-menu')) {
+                    closeMenu();
+                } else {
+                    openMenu();
+                }
             });
         }
+
+        // Close Menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (navMenu && navMenu.classList.contains('show-menu') && navToggle) {
+                if (!navMenu.contains(e.target) && !navToggle.contains(e.target)) {
+                    closeMenu();
+                }
+            }
+        });
 
         // Close Menu when clicking a link and handle active states
         navLinks.forEach(link => {
             link.addEventListener('click', () => {
-                // Close menu
-                if (navMenu && navMenu.classList.contains('show-menu')) {
-                    navMenu.classList.remove('show-menu');
-                    if (navToggle) navToggle.setAttribute('aria-expanded', 'false');
-                }
+                closeMenu();
                 
                 // Update active link
                 navLinks.forEach(l => l.classList.remove('active-link'));
@@ -38,22 +62,30 @@ const initNavigation = () => {
             });
         });
 
-        // Header shadow on scroll
+        // Header shadow on scroll (Throttled with requestAnimationFrame for performance)
+        let ticking = false;
         const scrollHeader = () => {
             if (window.scrollY >= 50) {
                 header.classList.add('scroll-header');
             } else {
                 header.classList.remove('scroll-header');
             }
+            ticking = false;
         };
-        window.addEventListener('scroll', scrollHeader, { passive: true });
+
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(scrollHeader);
+                ticking = true;
+            }
+        }, { passive: true });
     } catch (error) {
         console.error('Error initializing Navigation:', error);
     }
 };
 
 // ==========================================================================
-// 2. THEME TOGGLE & 3. LOCALSTORAGE PERSISTENCE
+// 2. THEME TOGGLE & LOCALSTORAGE PERSISTENCE
 // ==========================================================================
 const initThemeToggle = () => {
     try {
@@ -62,15 +94,10 @@ const initThemeToggle = () => {
         if (!themeButton || !themeIcon) return;
 
         const darkTheme = 'dark-theme';
-        const iconTheme = 'fa-sun'; // Toggles from moon to sun
-
-        // Previously selected theme (if user selected)
+        
         const selectedTheme = localStorage.getItem('selected-theme');
-
-        // Get current theme state
         const getCurrentTheme = () => document.body.classList.contains(darkTheme) ? 'dark' : 'light';
         
-        // Validate and apply saved theme
         if (selectedTheme) {
             document.body.classList[selectedTheme === 'dark' ? 'add' : 'remove'](darkTheme);
             if (selectedTheme === 'dark') {
@@ -79,7 +106,6 @@ const initThemeToggle = () => {
             }
         }
 
-        // Activate / deactivate the theme manually with the button
         themeButton.addEventListener('click', () => {
             document.body.classList.toggle(darkTheme);
             
@@ -91,7 +117,6 @@ const initThemeToggle = () => {
                 themeIcon.classList.add('fa-moon');
             }
             
-            // Save theme preference to local storage
             localStorage.setItem('selected-theme', getCurrentTheme());
         });
     } catch (error) {
@@ -100,7 +125,7 @@ const initThemeToggle = () => {
 };
 
 // ==========================================================================
-// 4. IMAGE SLIDER (Gallery)
+// 3. IMAGE SLIDER (Gallery)
 // ==========================================================================
 const initImageSlider = () => {
     try {
@@ -116,10 +141,10 @@ const initImageSlider = () => {
 
         let currentIndex = 0;
 
-        // Create dots dynamically
         slides.forEach((_, index) => {
-            const dot = document.createElement('div');
+            const dot = document.createElement('button');
             dot.classList.add('dot');
+            dot.setAttribute('aria-label', `Go to slide ${index + 1}`);
             if (index === 0) dot.classList.add('active');
             dot.addEventListener('click', () => goToSlide(index));
             dotsContainer.appendChild(dot);
@@ -153,7 +178,7 @@ const initImageSlider = () => {
 };
 
 // ==========================================================================
-// 5. TESTIMONIAL CAROUSEL
+// 4. TESTIMONIAL CAROUSEL
 // ==========================================================================
 const initTestimonialCarousel = () => {
     try {
@@ -169,10 +194,10 @@ const initTestimonialCarousel = () => {
 
         let currentIndex = 0;
 
-        // Setup indicators dynamically
         slides.forEach((_, index) => {
-            const dot = document.createElement('div');
-            dot.classList.add('dot'); // Reuse dot styling from slider
+            const dot = document.createElement('button');
+            dot.classList.add('dot');
+            dot.setAttribute('aria-label', `Go to testimonial ${index + 1}`);
             if (index === 0) dot.classList.add('active');
             dot.addEventListener('click', () => goToSlide(index));
             indicators.appendChild(dot);
@@ -181,10 +206,7 @@ const initTestimonialCarousel = () => {
         const dots = Array.from(indicators.children);
 
         const updateCarousel = () => {
-            // Determine percentage based on items visible (css defines min-width for slides)
             const slideWidth = 100 / (window.innerWidth >= 1200 ? 3 : window.innerWidth >= 992 ? 2 : 1);
-            
-            // Adjust translation based on current index and slide width
             track.style.transform = `translateX(-${currentIndex * slideWidth}%)`;
             
             dots.forEach(dot => dot.classList.remove('active'));
@@ -206,15 +228,18 @@ const initTestimonialCarousel = () => {
             updateCarousel();
         });
 
-        // Update layout on resize
-        window.addEventListener('resize', updateCarousel, { passive: true });
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(updateCarousel, 100);
+        }, { passive: true });
     } catch (error) {
         console.error('Error initializing Testimonial Carousel:', error);
     }
 };
 
 // ==========================================================================
-// 6. FAQ ACCORDION
+// 5. FAQ ACCORDION
 // ==========================================================================
 const initFaqAccordion = () => {
     try {
@@ -229,7 +254,6 @@ const initFaqAccordion = () => {
             header.addEventListener('click', () => {
                 const isOpen = item.classList.contains('active');
                 
-                // Close all other items
                 accordionItems.forEach(acc => {
                     acc.classList.remove('active');
                     const accContent = acc.querySelector('.accordion__content');
@@ -251,21 +275,20 @@ const initFaqAccordion = () => {
 };
 
 // ==========================================================================
-// 7. ANIMATED COUNTERS & 12. FADE-IN ON SCROLL (IntersectionObserver)
+// 6. ANIMATED COUNTERS & FADE-IN ON SCROLL
 // ==========================================================================
 const initScrollAnimations = () => {
     try {
-        // --- 7. Animated Counters ---
         const counters = document.querySelectorAll('.stat__number');
         
         const animateCounter = (counter) => {
             const target = +counter.getAttribute('data-target');
-            const duration = 2000; // Total animation duration in ms
-            const stepTime = Math.abs(Math.floor(duration / target));
+            const duration = 2000;
+            const stepTime = Math.abs(Math.floor(duration / target)) || 10;
             
             let current = 0;
             const timer = setInterval(() => {
-                current += Math.ceil(target / 100) || 1; // Increment step
+                current += Math.ceil(target / (duration / stepTime)) || 1;
                 if (current >= target) {
                     counter.innerText = target;
                     clearInterval(timer);
@@ -286,14 +309,13 @@ const initScrollAnimations = () => {
 
         counters.forEach(counter => counterObserver.observe(counter));
 
-        // --- 12. Fade-in on Scroll ---
         const sections = document.querySelectorAll('.section');
         
-        // Initial setup for fade animation
         sections.forEach(section => {
             section.style.opacity = '0';
             section.style.transform = 'translateY(30px)';
             section.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+            section.style.willChange = 'opacity, transform';
         });
 
         const sectionObserver = new IntersectionObserver((entries, observer) => {
@@ -314,33 +336,43 @@ const initScrollAnimations = () => {
 };
 
 // ==========================================================================
-// 8. SCROLL PROGRESS BAR
+// 7. SCROLL PROGRESS BAR
 // ==========================================================================
 const initScrollProgress = () => {
     try {
         const progressBar = document.getElementById('scroll-progress');
         if (!progressBar) return;
+        
+        let ticking = false;
 
         const updateProgress = () => {
             const scrollTotal = document.documentElement.scrollTop;
             const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
             const scrolled = (scrollTotal / height) * 100;
             progressBar.style.width = `${scrolled}%`;
+            ticking = false;
         };
 
-        window.addEventListener('scroll', updateProgress, { passive: true });
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(updateProgress);
+                ticking = true;
+            }
+        }, { passive: true });
     } catch (error) {
         console.error('Error initializing Scroll Progress Bar:', error);
     }
 };
 
 // ==========================================================================
-// 9. BACK TO TOP BUTTON
+// 8. BACK TO TOP BUTTON
 // ==========================================================================
 const initBackToTop = () => {
     try {
         const scrollUp = document.getElementById('scroll-up');
         if (!scrollUp) return;
+
+        let ticking = false;
 
         const toggleScrollUp = () => {
             if (window.scrollY >= 400) {
@@ -348,9 +380,15 @@ const initBackToTop = () => {
             } else {
                 scrollUp.classList.remove('show-scroll');
             }
+            ticking = false;
         };
 
-        window.addEventListener('scroll', toggleScrollUp, { passive: true });
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(toggleScrollUp);
+                ticking = true;
+            }
+        }, { passive: true });
         
         scrollUp.addEventListener('click', (e) => {
             e.preventDefault();
@@ -365,7 +403,7 @@ const initBackToTop = () => {
 };
 
 // ==========================================================================
-// 11. CONTACT FORM VALIDATION
+// 9. CONTACT FORM VALIDATION
 // ==========================================================================
 const initFormValidation = () => {
     try {
@@ -376,7 +414,8 @@ const initFormValidation = () => {
             const errorElement = document.getElementById(`${input.id}-error`);
             if (errorElement) {
                 errorElement.innerText = message;
-                input.style.borderColor = '#ff5b5b'; // Highlight error field
+                input.style.borderColor = '#ff5b5b';
+                input.setAttribute('aria-invalid', 'true');
             }
         };
 
@@ -384,7 +423,8 @@ const initFormValidation = () => {
             const errorElement = document.getElementById(`${input.id}-error`);
             if (errorElement) {
                 errorElement.innerText = '';
-                input.style.borderColor = ''; // Reverts to CSS default
+                input.style.borderColor = ''; 
+                input.removeAttribute('aria-invalid');
             }
         };
 
@@ -402,7 +442,6 @@ const initFormValidation = () => {
             const subject = document.getElementById('subject');
             const message = document.getElementById('message');
 
-            // Name validation
             if (name.value.trim() === '') {
                 showError(name, 'Name is required');
                 isValid = false;
@@ -410,7 +449,6 @@ const initFormValidation = () => {
                 clearError(name);
             }
 
-            // Email validation
             if (email.value.trim() === '') {
                 showError(email, 'Email is required');
                 isValid = false;
@@ -421,7 +459,6 @@ const initFormValidation = () => {
                 clearError(email);
             }
 
-            // Subject validation
             if (subject.value.trim() === '') {
                 showError(subject, 'Subject is required');
                 isValid = false;
@@ -429,7 +466,6 @@ const initFormValidation = () => {
                 clearError(subject);
             }
 
-            // Message validation
             if (message.value.trim() === '') {
                 showError(message, 'Message is required');
                 isValid = false;
@@ -437,30 +473,27 @@ const initFormValidation = () => {
                 clearError(message);
             }
 
-            // Simulate Form Submission if Valid
             if (isValid) {
                 const btn = document.getElementById('submit-btn');
                 const originalText = btn.innerHTML;
                 
-                // Show loading state
                 btn.innerHTML = '<span>Sending...</span> <i class="fa-solid fa-spinner fa-spin"></i>';
+                btn.disabled = true;
                 
                 setTimeout(() => {
-                    // Show success state
                     btn.innerHTML = '<span>Message Sent!</span> <i class="fa-solid fa-check"></i>';
                     btn.style.background = '#4CAF50';
                     form.reset();
                     
-                    // Revert back to original state
                     setTimeout(() => {
                         btn.innerHTML = originalText;
-                        btn.style.background = ''; // Revert to CSS
+                        btn.style.background = '';
+                        btn.disabled = false;
                     }, 3000);
                 }, 1500);
             }
         });
 
-        // Clear error as user types
         form.querySelectorAll('input, textarea').forEach(input => {
             input.addEventListener('input', () => clearError(input));
         });
@@ -471,20 +504,12 @@ const initFormValidation = () => {
 };
 
 // ==========================================================================
-// 13. LOADING ANIMATION
+// 10. DYNAMIC FOOTER YEAR
 // ==========================================================================
-const initLoadingAnimation = () => {
-    try {
-        // Simple loading simulation by initially hiding the body, 
-        // then fading it in when fully loaded.
-        document.body.style.opacity = '0';
-        document.body.style.transition = 'opacity 0.6s ease-in-out';
-        
-        window.addEventListener('load', () => {
-            document.body.style.opacity = '1';
-        });
-    } catch (error) {
-        console.error('Error initializing Loading Animation:', error);
+const initFooterYear = () => {
+    const yearEl = document.getElementById('current-year');
+    if (yearEl) {
+        yearEl.textContent = new Date().getFullYear();
     }
 };
 
@@ -492,7 +517,6 @@ const initLoadingAnimation = () => {
 // INITIALIZATION ON DOM LOAD
 // ==========================================================================
 document.addEventListener('DOMContentLoaded', () => {
-    initLoadingAnimation();
     initNavigation();
     initThemeToggle();
     initImageSlider();
@@ -502,4 +526,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initScrollProgress();
     initBackToTop();
     initFormValidation();
+    initFooterYear();
 });
