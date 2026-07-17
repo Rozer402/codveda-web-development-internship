@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="TaskFlow Pro - A modern productivity and task management dashboard. Add, edit, delete, and organize your tasks with ease.">
+    <title>TaskFlow Pro | Productivity Dashboard</title>
+
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-layout">
+
+        <!-- SIDEBAR OVERLAY (mobile) -->
+        <div class="sidebar-overlay" id="sidebar-overlay" aria-hidden="true"></div>
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar" aria-label="Main Navigation">
+            <div class="sidebar-header">
+                <a href="#" class="logo" aria-label="TaskFlow Pro Home">
+                    <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+                    <span>TaskFlow Pro</span>
+                </a>
+                <!-- Mobile close button -->
+                <button type="button" class="btn-icon sidebar-close-btn" id="sidebar-close-btn" aria-label="Close navigation">
+                    <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav" aria-label="Application sections">
+                <ul class="nav-list" role="list">
+                    <li class="nav-item">
+                        <a href="#dashboard" class="nav-link active" aria-current="page">
+                            <i class="fa-solid fa-chart-pie" aria-hidden="true"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#all-tasks" class="nav-link">
+                            <i class="fa-solid fa-list-check" aria-hidden="true"></i>
+                            <span>All Tasks</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#completed" class="nav-link">
+                            <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                            <span>Completed</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#important" class="nav-link">
+                            <i class="fa-solid fa-star" aria-hidden="true"></i>
+                            <span>Important</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#today" class="nav-link">
+                            <i class="fa-solid fa-calendar-day" aria-hidden="true"></i>
+                            <span>Today</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#upcoming" class="nav-link">
+                            <i class="fa-solid fa-calendar-alt" aria-hidden="true"></i>
+                            <span>Upcoming</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="sidebar-divider" role="separator"></div>
+
+                <ul class="nav-list" role="list">
+                    <li class="nav-item">
+                        <a href="#settings" class="nav-link" id="settings-nav-link">
+                            <i class="fa-solid fa-gear" aria-hidden="true"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="sidebar-footer">
+                <span class="app-version">v1.0.0</span>
+            </div>
+        </aside>
+
+        <div class="main-wrapper">
+
+            <!-- HEADER -->
+            <header class="app-header" role="banner">
+                <!-- Hamburger — visible on mobile only -->
+                <button type="button" class="btn-icon sidebar-toggle-btn" id="sidebar-toggle-btn" aria-label="Open navigation" aria-controls="sidebar" aria-expanded="false">
+                    <i class="fa-solid fa-bars" aria-hidden="true"></i>
+                </button>
+
+                <div class="header-search">
+                    <label for="global-search" class="sr-only">Search tasks globally</label>
+                    <div class="search-input-wrapper">
+                        <i class="fa-solid fa-magnifying-glass search-icon" aria-hidden="true"></i>
+                        <input type="search" id="global-search" class="search-input" placeholder="Search tasks, categories..." autocomplete="off">
+                    </div>
+                </div>
+
+                <div class="header-actions">
+                    <button type="button" class="btn-icon theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+                        <i class="fa-solid fa-moon" aria-hidden="true"></i>
+                    </button>
+
+                    <!-- NOTIFICATION BUTTON -->
+                    <div class="notif-wrapper" style="position:relative;">
+                        <button type="button" class="btn-icon notification-btn" id="notification-btn" aria-label="View notifications" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa-regular fa-bell" aria-hidden="true"></i>
+                            <span class="notification-badge" id="notif-badge" aria-hidden="true" style="display:none;">0</span>
+                        </button>
+                        <!-- NOTIFICATION PANEL -->
+                        <div class="notif-panel" id="notif-panel" role="dialog" aria-label="Notifications" aria-modal="false" hidden>
+                            <div class="notif-panel-header">
+                                <h2 class="notif-panel-title">Notifications</h2>
+                                <button type="button" class="btn-text" id="mark-all-read-btn">Mark all read</button>
+                            </div>
+                            <div class="notif-list" id="notif-list" role="list">
+                                <!-- JS populated -->
+                            </div>
+                            <div class="notif-empty-state" id="notif-empty" aria-hidden="true">
+                                <i class="fa-regular fa-bell-slash" aria-hidden="true"></i>
+                                <p>No notifications yet.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- USER PROFILE BUTTON + DROPDOWN -->
+                    <div class="profile-wrapper" style="position:relative;">
+                        <button type="button" class="user-profile-btn" id="profile-btn" aria-label="User menu" aria-haspopup="true" aria-expanded="false">
+                            <span class="user-avatar-placeholder" aria-hidden="true">AB</span>
+                            <span class="user-name">Aditya Bhusal</span>
+                            <i class="fa-solid fa-chevron-down dropdown-icon" aria-hidden="true"></i>
+                        </button>
+
+                        <!-- PROFILE DROPDOWN MENU -->
+                        <div class="profile-dropdown" id="profile-dropdown" role="menu" aria-label="User options" hidden>
+                            <div class="profile-dropdown-header">
+                                <div class="pd-avatar">AB</div>
+                                <div class="pd-info">
+                                    <strong class="pd-name">Aditya Bhusal</strong>
+                                    <span class="pd-role">Frontend Developer</span>
+                                </div>
+                            </div>
+                            <div class="profile-dropdown-divider"></div>
+                            <ul class="profile-dropdown-list" role="none">
+                                <li role="none">
+                                    <button type="button" class="pd-item" role="menuitem" id="pd-profile-btn">
+                                        <i class="fa-solid fa-user" aria-hidden="true"></i>
+                                        <span>My Profile</span>
+                                    </button>
+                                </li>
+                                <li role="none">
+                                    <button type="button" class="pd-item" role="menuitem" id="pd-theme-btn">
+                                        <i class="fa-solid fa-moon" id="pd-theme-icon" aria-hidden="true"></i>
+                                        <span id="pd-theme-label">Toggle Theme</span>
+                                    </button>
+                                </li>
+                                <li role="none">
+                                    <button type="button" class="pd-item" role="menuitem" id="pd-export-btn">
+                                        <i class="fa-solid fa-file-export" aria-hidden="true"></i>
+                                        <span>Export Tasks (JSON)</span>
+                                    </button>
+                                </li>
+                                <li role="none">
+                                    <button type="button" class="pd-item" role="menuitem" id="pd-import-btn">
+                                        <i class="fa-solid fa-file-import" aria-hidden="true"></i>
+                                        <span>Import Tasks</span>
+                                    </button>
+                                </li>
+                                <div class="profile-dropdown-divider"></div>
+                                <li role="none">
+                                    <button type="button" class="pd-item pd-item-danger" role="menuitem" id="pd-clear-btn">
+                                        <i class="fa-solid fa-trash" aria-hidden="true"></i>
+                                        <span>Clear All Tasks</span>
+                                    </button>
+                                </li>
+                                <li role="none">
+                                    <button type="button" class="pd-item" role="menuitem" id="pd-about-btn">
+                                        <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+                                        <span>About TaskFlow</span>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Hidden file input for import -->
+                        <input type="file" id="import-file-input" accept=".json" style="display:none;" aria-hidden="true">
+                    </div>
+                </div>
+            </header>
+
+            <!-- MAIN CONTENT -->
+            <main class="main-content" id="main" tabindex="-1" aria-label="Task management dashboard">
+
+                <!-- Page Header / Hero Heading -->
+                <header class="page-header">
+                    <div class="page-title-group">
+                        <h1 class="page-title" id="page-title">Dashboard</h1>
+                        <p class="page-subtitle">Welcome back — here's your productivity overview.</p>
+                    </div>
+                    <div class="page-actions">
+                        <button type="button" class="btn btn-outline btn-bulk-delete" id="bulk-delete-btn" aria-label="Delete all completed tasks">
+                            <i class="fa-solid fa-trash-can" aria-hidden="true"></i>
+                            <span>Clear Completed</span>
+                        </button>
+                        <button type="button" class="btn btn-primary" id="header-create-btn" aria-label="Create new task" aria-controls="quick-add-form">
+                            <i class="fa-solid fa-plus" aria-hidden="true"></i>
+                            <span>Create Task</span>
+                        </button>
+                    </div>
+                </header>
+
+                <!-- Statistics Cards -->
+                <section class="statistics-grid" aria-label="Task Statistics">
+                    <article class="stat-card">
+                        <div class="stat-icon-wrapper bg-blue" aria-hidden="true">
+                            <i class="fa-solid fa-layer-group"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h2 class="stat-title">Total Tasks</h2>
+                            <p class="stat-value" id="stat-total" aria-live="polite">0</p>
+                        </div>
+                    </article>
+
+                    <article class="stat-card">
+                        <div class="stat-icon-wrapper bg-green" aria-hidden="true">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h2 class="stat-title">Completed</h2>
+                            <p class="stat-value" id="stat-completed" aria-live="polite">0</p>
+                        </div>
+                    </article>
+
+                    <article class="stat-card">
+                        <div class="stat-icon-wrapper bg-orange" aria-hidden="true">
+                            <i class="fa-regular fa-clock"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h2 class="stat-title">Pending</h2>
+                            <p class="stat-value" id="stat-pending" aria-live="polite">0</p>
+                        </div>
+                    </article>
+
+                    <article class="stat-card">
+                        <div class="stat-icon-wrapper bg-purple" aria-hidden="true">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h2 class="stat-title">Completion</h2>
+                            <p class="stat-value" id="stat-percentage" aria-live="polite">0%</p>
+                        </div>
+                    </article>
+                </section>
+
+                <div class="content-grid">
+
+                    <div class="main-column">
+
+                        <!-- FILTER BAR -->
+                        <section class="filter-bar" aria-label="Task filters and sorting">
+                            <div class="filter-search">
+                                <label for="list-search" class="sr-only">Filter tasks in current view</label>
+                                <div class="search-input-wrapper">
+                                    <i class="fa-solid fa-filter" aria-hidden="true"></i>
+                                    <input type="text" id="list-search" class="form-input filter-input" placeholder="Filter current list..." autocomplete="off">
+                                </div>
+                            </div>
+
+                            <div class="filter-controls">
+                                <div class="select-wrapper">
+                                    <label for="category-filter" class="sr-only">Filter by category</label>
+                                    <select id="category-filter" class="form-select">
+                                        <option value="all">All Categories</option>
+                                        <option value="work">Work</option>
+                                        <option value="personal">Personal</option>
+                                        <option value="health">Health</option>
+                                        <option value="learning">Learning</option>
+                                    </select>
+                                </div>
+
+                                <div class="select-wrapper">
+                                    <label for="status-filter" class="sr-only">Filter by status</label>
+                                    <select id="status-filter" class="form-select">
+                                        <option value="all">All Statuses</option>
+                                        <option value="completed">Completed</option>
+                                        <option value="pending">Pending</option>
+                                    </select>
+                                </div>
+
+                                <div class="select-wrapper">
+                                    <label for="sort-tasks" class="sr-only">Sort tasks</label>
+                                    <select id="sort-tasks" class="form-select">
+                                        <option value="date-desc">Newest First</option>
+                                        <option value="date-asc">Oldest First</option>
+                                        <option value="alpha">A → Z</option>
+                                        <option value="priority-desc">Priority: High → Low</option>
+                                        <option value="priority-asc">Priority: Low → High</option>
+                                        <option value="due-date">Due Date</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- TASK LIST -->
+                        <section class="task-list-container" aria-label="Task list">
+                            <!-- JS populates this -->
+                            <div class="task-list" id="main-task-list" role="list" aria-live="polite" aria-label="Tasks"></div>
+
+                            <!-- EMPTY STATE -->
+                            <div class="empty-state hidden" id="empty-state" role="status" aria-label="No tasks found">
+                                <div class="empty-state-illustration" aria-hidden="true">
+                                    <svg viewBox="0 0 200 200" width="180" height="180" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="100" cy="80" r="50" fill="var(--color-primary-alpha)" />
+                                        <rect x="70" y="130" width="60" height="8" rx="4" fill="var(--color-border)" />
+                                        <rect x="80" y="148" width="40" height="6" rx="3" fill="var(--color-border)" />
+                                        <path d="M82 80 L95 95 L122 66" stroke="var(--color-primary)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+                                    </svg>
+                                </div>
+                                <h3 class="empty-state-title">No tasks here</h3>
+                                <p class="empty-state-description">You're all caught up! Add a new task to get started.</p>
+                                <button type="button" class="btn btn-primary" id="empty-create-btn" aria-label="Create your first task">
+                                    <i class="fa-solid fa-plus" aria-hidden="true"></i>
+                                    <span>Create Task</span>
+                                </button>
+                            </div>
+                        </section>
+
+                    </div><!-- /.main-column -->
+
+                    <div class="side-column">
+
+                        <!-- TASK INPUT PANEL -->
+                        <section class="task-input-section panel" aria-labelledby="quick-add-heading">
+                            <header class="panel-header">
+                                <h2 class="panel-title" id="quick-add-heading">Quick Add Task</h2>
+                            </header>
+
+                            <form id="quick-add-form" class="task-form" novalidate>
+                                <div class="form-group">
+                                    <label for="task-title" class="form-label">
+                                        Task Title <span class="required" aria-hidden="true">*</span>
+                                    </label>
+                                    <input type="text" id="task-title" class="form-input" placeholder="What needs to be done?" required aria-required="true" maxlength="120" autocomplete="off">
+                                    <p class="form-error" id="task-title-error" role="alert" aria-live="assertive"></p>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="task-description" class="form-label">Description</label>
+                                    <textarea id="task-description" class="form-textarea" rows="3" placeholder="Add more details..." maxlength="500"></textarea>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group half">
+                                        <label for="task-priority" class="form-label">Priority</label>
+                                        <div class="select-wrapper">
+                                            <select id="task-priority" class="form-select">
+                                                <option value="low">Low</option>
+                                                <option value="medium" selected>Medium</option>
+                                                <option value="high">High</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group half">
+                                        <label for="task-category" class="form-label">Category</label>
+                                        <div class="select-wrapper">
+                                            <select id="task-category" class="form-select">
+                                                <option value="work">Work</option>
+                                                <option value="personal">Personal</option>
+                                                <option value="health">Health</option>
+                                                <option value="learning">Learning</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="task-due-date" class="form-label">Due Date</label>
+                                    <input type="date" id="task-due-date" class="form-input">
+                                </div>
+
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary w-full">
+                                        <i class="fa-solid fa-plus" aria-hidden="true"></i>
+                                        <span>Add Task</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </section>
+
+                    </div><!-- /.side-column -->
+
+                </div><!-- /.content-grid -->
+            </main><!-- /#main -->
+
+            <!-- FOOTER -->
+            <footer class="app-footer" role="contentinfo">
+                <div class="footer-content">
+                    <p>&copy; 2026 TaskFlow Pro. All rights reserved.</p>
+                    <nav class="footer-links" aria-label="Footer links">
+                        <a href="#" class="footer-link">Privacy Policy</a>
+                        <a href="#" class="footer-link">Terms of Service</a>
+                        <a href="#" class="footer-link">Help Center</a>
+                    </nav>
+                </div>
+            </footer>
+
+        </div><!-- /.main-wrapper -->
+    </div><!-- /.app-layout -->
+
+    <!-- ================================================================
+         MODALS & DRAWERS (outside app-layout for stacking context)
+         ================================================================ -->
+
+    <!-- MODAL: Edit Task -->
+    <dialog id="edit-task-modal" class="modal" aria-labelledby="edit-modal-title">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <header class="modal-header">
+                    <h2 class="modal-title" id="edit-modal-title">
+                        <i class="fa-solid fa-pen" aria-hidden="true"></i>
+                        Edit Task
+                    </h2>
+                    <button type="button" class="btn-icon-close close-modal" aria-label="Close edit modal">
+                        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                    </button>
+                </header>
+
+                <div class="modal-body">
+                    <form id="edit-task-form" class="task-form" novalidate>
+                        <div class="form-group">
+                            <label for="edit-task-title" class="form-label">
+                                Task Title <span class="required" aria-hidden="true">*</span>
+                            </label>
+                            <input type="text" id="edit-task-title" class="form-input" required aria-required="true" maxlength="120" autocomplete="off">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="edit-task-description" class="form-label">Description</label>
+                            <textarea id="edit-task-description" class="form-textarea" rows="4" maxlength="500"></textarea>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group half">
+                                <label for="edit-task-priority" class="form-label">Priority</label>
+                                <div class="select-wrapper">
+                                    <select id="edit-task-priority" class="form-select">
+                                        <option value="low">Low</option>
+                                        <option value="medium">Medium</option>
+                                        <option value="high">High</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group half">
+                                <label for="edit-task-category" class="form-label">Category</label>
+                                <div class="select-wrapper">
+                                    <select id="edit-task-category" class="form-select">
+                                        <option value="work">Work</option>
+                                        <option value="personal">Personal</option>
+                                        <option value="health">Health</option>
+                                        <option value="learning">Learning</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="edit-task-due-date" class="form-label">Due Date</label>
+                            <input type="date" id="edit-task-due-date" class="form-input">
+                        </div>
+                    </form>
+                </div>
+
+                <footer class="modal-footer">
+                    <button type="button" class="btn btn-outline close-modal">Cancel</button>
+                    <button type="submit" form="edit-task-form" class="btn btn-primary">Save Changes</button>
+                </footer>
+            </div>
+        </div>
+    </dialog>
+
+    <!-- MODAL: Delete Confirmation -->
+    <dialog id="confirm-modal" class="modal modal-sm" aria-labelledby="confirm-modal-title" aria-describedby="confirm-modal-desc">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <header class="modal-header border-none">
+                    <h2 class="modal-title text-danger" id="confirm-modal-title">
+                        <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+                        <span id="confirm-modal-heading">Confirm Deletion</span>
+                    </h2>
+                    <button type="button" class="btn-icon-close close-modal" aria-label="Close confirmation dialog">
+                        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                    </button>
+                </header>
+
+                <div class="modal-body">
+                    <p id="confirm-modal-desc">Are you sure you want to delete this task? This action cannot be undone.</p>
+                </div>
+
+                <footer class="modal-footer">
+                    <button type="button" class="btn btn-outline close-modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirm-delete-btn">Delete Task</button>
+                </footer>
+            </div>
+        </div>
+    </dialog>
+
+    <!-- MODAL: Profile -->
+    <dialog id="profile-modal" class="modal" aria-labelledby="profile-modal-title">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content profile-modal-content">
+                <button type="button" class="btn-icon-close close-modal profile-modal-close" aria-label="Close profile">
+                    <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                </button>
+
+                <!-- Glassmorphism hero banner -->
+                <div class="profile-modal-banner" aria-hidden="true"></div>
+
+                <div class="profile-modal-body">
+                    <div class="profile-avatar-large" aria-hidden="true">AB</div>
+
+                    <h2 class="profile-name" id="profile-modal-title">Aditya Bhusal</h2>
+                    <p class="profile-role-badge">
+                        <i class="fa-solid fa-code" aria-hidden="true"></i>
+                        Frontend Developer
+                    </p>
+
+                    <div class="profile-tech-stack" aria-label="Tech stack">
+                        <span class="tech-badge tech-html">HTML5</span>
+                        <span class="tech-badge tech-css">CSS3</span>
+                        <span class="tech-badge tech-js">JavaScript</span>
+                    </div>
+
+                    <div class="profile-stats-row">
+                        <div class="profile-stat">
+                            <span class="profile-stat-value" id="profile-total-tasks">0</span>
+                            <span class="profile-stat-label">Tasks Created</span>
+                        </div>
+                        <div class="profile-stat">
+                            <span class="profile-stat-value" id="profile-completed-tasks">0</span>
+                            <span class="profile-stat-label">Completed</span>
+                        </div>
+                        <div class="profile-stat">
+                            <span class="profile-stat-value" id="profile-completion-rate">0%</span>
+                            <span class="profile-stat-label">Completion Rate</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-about-card">
+                        <div class="profile-about-row">
+                            <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+                            <span>TaskFlow Pro <strong>v1.0.0</strong></span>
+                        </div>
+                        <div class="profile-about-row">
+                            <i class="fa-solid fa-code" aria-hidden="true"></i>
+                            <span>Vanilla HTML · CSS · JavaScript</span>
+                        </div>
+                        <div class="profile-about-row">
+                            <i class="fa-brands fa-github" aria-hidden="true"></i>
+                            <span>Rozer402 / codveda-web-development-internship</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </dialog>
+
+    <!-- MODAL: About -->
+    <dialog id="about-modal" class="modal modal-sm" aria-labelledby="about-modal-title">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <header class="modal-header">
+                    <h2 class="modal-title" id="about-modal-title">
+                        <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+                        About TaskFlow Pro
+                    </h2>
+                    <button type="button" class="btn-icon-close close-modal" aria-label="Close about dialog">
+                        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                    </button>
+                </header>
+                <div class="modal-body about-modal-body">
+                    <div class="about-logo-icon" aria-hidden="true">
+                        <i class="fa-solid fa-layer-group"></i>
+                    </div>
+                    <h3 class="about-app-name">TaskFlow Pro</h3>
+                    <p class="about-version">Version 1.0.0</p>
+                    <p class="about-description">A modern productivity and task management dashboard built as a Codveda Level 2 project.</p>
+                    <div class="about-meta">
+                        <div class="about-meta-row">
+                            <span class="about-meta-label">Developer</span>
+                            <span class="about-meta-value">Aditya Bhusal</span>
+                        </div>
+                        <div class="about-meta-row">
+                            <span class="about-meta-label">Built With</span>
+                            <span class="about-meta-value">HTML5 · CSS3 · JavaScript</span>
+                        </div>
+                        <div class="about-meta-row">
+                            <span class="about-meta-label">License</span>
+                            <span class="about-meta-value">MIT</span>
+                        </div>
+                    </div>
+                </div>
+                <footer class="modal-footer">
+                    <button type="button" class="btn btn-primary close-modal">Close</button>
+                </footer>
+            </div>
+        </div>
+    </dialog>
+
+    <!-- SETTINGS DRAWER -->
+    <div class="settings-overlay" id="settings-overlay" aria-hidden="true"></div>
+    <aside class="settings-drawer" id="settings-drawer" role="dialog" aria-label="Settings" aria-modal="true" hidden>
+        <div class="settings-drawer-header">
+            <h2 class="settings-title">
+                <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                Settings
+            </h2>
+            <button type="button" class="btn-icon-close" id="settings-close-btn" aria-label="Close settings">
+                <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+            </button>
+        </div>
+
+        <div class="settings-body">
+
+            <!-- Appearance -->
+            <section class="settings-section" aria-labelledby="settings-appearance-heading">
+                <h3 class="settings-section-title" id="settings-appearance-heading">
+                    <i class="fa-solid fa-palette" aria-hidden="true"></i>
+                    Appearance
+                </h3>
+                <div class="settings-theme-grid" role="radiogroup" aria-label="Select theme">
+                    <label class="theme-option" data-theme-val="light">
+                        <input type="radio" name="app-theme" value="light" class="sr-only">
+                        <span class="theme-option-preview theme-preview-light" aria-hidden="true"></span>
+                        <span class="theme-option-label">Light</span>
+                    </label>
+                    <label class="theme-option" data-theme-val="dark">
+                        <input type="radio" name="app-theme" value="dark" class="sr-only">
+                        <span class="theme-option-preview theme-preview-dark" aria-hidden="true"></span>
+                        <span class="theme-option-label">Dark</span>
+                    </label>
+                    <label class="theme-option" data-theme-val="system">
+                        <input type="radio" name="app-theme" value="system" class="sr-only">
+                        <span class="theme-option-preview theme-preview-system" aria-hidden="true"></span>
+                        <span class="theme-option-label">System</span>
+                    </label>
+                </div>
+            </section>
+
+            <!-- Task Preferences -->
+            <section class="settings-section" aria-labelledby="settings-tasks-heading">
+                <h3 class="settings-section-title" id="settings-tasks-heading">
+                    <i class="fa-solid fa-list-check" aria-hidden="true"></i>
+                    Task Preferences
+                </h3>
+                <div class="settings-field">
+                    <label for="setting-default-category" class="settings-label">Default Category</label>
+                    <div class="select-wrapper">
+                        <select id="setting-default-category" class="form-select">
+                            <option value="work">Work</option>
+                            <option value="personal">Personal</option>
+                            <option value="health">Health</option>
+                            <option value="learning">Learning</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="settings-field">
+                    <label for="setting-default-priority" class="settings-label">Default Priority</label>
+                    <div class="select-wrapper">
+                        <select id="setting-default-priority" class="form-select">
+                            <option value="low">Low</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="settings-field">
+                    <label for="setting-default-sort" class="settings-label">Default Sort</label>
+                    <div class="select-wrapper">
+                        <select id="setting-default-sort" class="form-select">
+                            <option value="date-desc" selected>Newest First</option>
+                            <option value="date-asc">Oldest First</option>
+                            <option value="alpha">A → Z</option>
+                            <option value="priority-desc">Priority High → Low</option>
+                            <option value="due-date">Due Date</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Notifications -->
+            <section class="settings-section" aria-labelledby="settings-notif-heading">
+                <h3 class="settings-section-title" id="settings-notif-heading">
+                    <i class="fa-solid fa-bell" aria-hidden="true"></i>
+                    Notifications
+                </h3>
+                <div class="settings-toggle-row">
+                    <div class="settings-toggle-info">
+                        <span class="settings-label">Enable Toasts</span>
+                        <span class="settings-hint">Show toast notifications for actions</span>
+                    </div>
+                    <label class="toggle-switch" aria-label="Enable toast notifications">
+                        <input type="checkbox" id="setting-enable-toasts" checked>
+                        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                    </label>
+                </div>
+                <div class="settings-field">
+                    <label for="setting-toast-duration" class="settings-label">Toast Duration (seconds)</label>
+                    <input type="number" id="setting-toast-duration" class="form-input" min="2" max="10" value="4" step="1">
+                </div>
+                <div class="settings-toggle-row">
+                    <div class="settings-toggle-info">
+                        <span class="settings-label">Enable Animations</span>
+                        <span class="settings-hint">Task card entrance and exit effects</span>
+                    </div>
+                    <label class="toggle-switch" aria-label="Enable animations">
+                        <input type="checkbox" id="setting-enable-animations" checked>
+                        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                    </label>
+                </div>
+            </section>
+
+            <!-- Accessibility -->
+            <section class="settings-section" aria-labelledby="settings-a11y-heading">
+                <h3 class="settings-section-title" id="settings-a11y-heading">
+                    <i class="fa-solid fa-universal-access" aria-hidden="true"></i>
+                    Accessibility
+                </h3>
+                <div class="settings-toggle-row">
+                    <div class="settings-toggle-info">
+                        <span class="settings-label">Reduce Motion</span>
+                        <span class="settings-hint">Minimize all animations</span>
+                    </div>
+                    <label class="toggle-switch" aria-label="Reduce motion">
+                        <input type="checkbox" id="setting-reduce-motion">
+                        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                    </label>
+                </div>
+                <div class="settings-toggle-row">
+                    <div class="settings-toggle-info">
+                        <span class="settings-label">High Contrast</span>
+                        <span class="settings-hint">Increase border and text contrast</span>
+                    </div>
+                    <label class="toggle-switch" aria-label="High contrast mode">
+                        <input type="checkbox" id="setting-high-contrast">
+                        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                    </label>
+                </div>
+            </section>
+
+            <!-- Data -->
+            <section class="settings-section" aria-labelledby="settings-data-heading">
+                <h3 class="settings-section-title" id="settings-data-heading">
+                    <i class="fa-solid fa-database" aria-hidden="true"></i>
+                    Data
+                </h3>
+                <div class="settings-data-grid">
+                    <button type="button" class="btn btn-outline" id="settings-export-btn">
+                        <i class="fa-solid fa-file-export" aria-hidden="true"></i>
+                        Export Tasks
+                    </button>
+                    <button type="button" class="btn btn-outline" id="settings-import-btn">
+                        <i class="fa-solid fa-file-import" aria-hidden="true"></i>
+                        Import Tasks
+                    </button>
+                    <button type="button" class="btn btn-outline" id="settings-clear-btn">
+                        <i class="fa-solid fa-trash" aria-hidden="true"></i>
+                        Clear All Tasks
+                    </button>
+                    <button type="button" class="btn btn-outline" id="settings-reset-btn">
+                        <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
+                        Reset Settings
+                    </button>
+                </div>
+            </section>
+
+            <!-- About -->
+            <section class="settings-section settings-about-section" aria-labelledby="settings-about-heading">
+                <h3 class="settings-section-title" id="settings-about-heading">
+                    <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+                    About
+                </h3>
+                <div class="settings-about-card">
+                    <div class="settings-about-row">
+                        <span class="settings-about-label">Application</span>
+                        <span class="settings-about-value">TaskFlow Pro</span>
+                    </div>
+                    <div class="settings-about-row">
+                        <span class="settings-about-label">Version</span>
+                        <span class="settings-about-value">1.0.0</span>
+                    </div>
+                    <div class="settings-about-row">
+                        <span class="settings-about-label">Developer</span>
+                        <span class="settings-about-value">Aditya Bhusal</span>
+                    </div>
+                    <div class="settings-about-row">
+                        <span class="settings-about-label">Built Using</span>
+                        <span class="settings-about-value">Vanilla HTML · CSS · JavaScript</span>
+                    </div>
+                </div>
+            </section>
+
+        </div><!-- /.settings-body -->
+    </aside>
+
+    <!-- TOAST CONTAINER — aria-live region, JS-populated only -->
+    <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="false"></div>
+
+    <!-- Scripts -->
+    <script src="js/script.js" type="module"></script>
+</body>
+</html>
