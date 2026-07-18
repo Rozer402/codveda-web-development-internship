@@ -18,10 +18,11 @@ export function TaskCard({ task = {}, onEdit, onDelete, onToggle }) {
             type="checkbox" 
             checked={!!task.completed} 
             onChange={() => onToggle(task.id, !task.completed)}
+            aria-label={task.completed ? "Mark as pending" : "Mark as completed"}
           />
           <span className="task-checkbox-custom"></span>
         </label>
-        <h3>{task.todo}</h3>
+        <h3>{task.title}</h3>
       </div>
       <div className="task-card-actions">
         <button 

@@ -16,13 +16,13 @@ export function useTasks() {
    * Loads tasks from the taskService API.
    */
   const fetchTasks = useCallback(async () => {
-    setLoading(true);
+    setLoading('Loading...');
     setError(null);
     try {
       const data = await taskService.getTasks();
       setTasks(data);
     } catch (err) {
-      setError(err.message || 'Failed to fetch tasks.');
+      setError(err.response?.data?.message || 'Failed to fetch tasks.');
     } finally {
       setLoading(false);
     }
@@ -30,28 +30,17 @@ export function useTasks() {
 
   /**
    * Adds a new task.
-   * Ensures new tasks get a unique local ID to avoid duplicates.
-   * @param {string} todoText
+   * @param {string} titleText
    */
-  const addTask = async (todoText) => {
-    setLoading(true);
+  const addTask = async (titleText) => {
+    setLoading('Saving...');
     setError(null);
     try {
-      const newTask = await taskService.createTask(todoText);
-      // DummyJSON always returns ID 151 (or standard new ID).
-      // If we add multiple tasks, we need to guarantee uniqueness locally.
-      const maxId = tasks.length > 0 ? Math.max(...tasks.map(t => Number(t.id))) : 150;
-      const uniqueId = Math.max(maxId + 1, 151);
-
-      const taskWithUniqueId = {
-        ...newTask,
-        id: uniqueId
-      };
-
-      setTasks(prevTasks => [taskWithUniqueId, ...prevTasks]);
-      return taskWithUniqueId;
+      const newTask = await taskService.createTask(titleText);
+      setTasks(prevTasks => [newTask, ...prevTasks]);
+      return newTask;
     } catch (err) {
-      setError(err.message || 'Failed to add task.');
+      setError(err.response?.data?.message || 'Failed to add task.');
       throw err;
     } finally {
       setLoading(false);
@@ -64,7 +53,7 @@ export function useTasks() {
    * @param {Object} updateData
    */
   const updateTask = async (id, updateData) => {
-    setLoading(true);
+    setLoading('Saving...');
     setError(null);
     try {
       const updated = await taskService.updateTask(id, updateData);
@@ -76,7 +65,7 @@ export function useTasks() {
       }
       return updated;
     } catch (err) {
-      setError(err.message || 'Failed to update task.');
+      setError(err.response?.data?.message || 'Failed to update task.');
       throw err;
     } finally {
       setLoading(false);
@@ -88,7 +77,7 @@ export function useTasks() {
    * @param {number|string} id
    */
   const removeTask = async (id) => {
-    setLoading(true);
+    setLoading('Deleting...');
     setError(null);
     try {
       await taskService.deleteTask(id);
@@ -97,7 +86,7 @@ export function useTasks() {
         setEditingTask(null);
       }
     } catch (err) {
-      setError(err.message || 'Failed to delete task.');
+      setError(err.response?.data?.message || 'Failed to delete task.');
       throw err;
     } finally {
       setLoading(false);

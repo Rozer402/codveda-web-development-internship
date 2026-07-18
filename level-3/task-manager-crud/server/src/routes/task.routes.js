@@ -2,6 +2,10 @@ const express = require('express');
 const router = express.Router();
 const taskController = require('../controllers/task.controller');
 const { validate, createTaskSchema, updateTaskSchema } = require('../validators/task.validator');
+const { protect } = require('../middleware/auth.middleware');
+
+// Protect all task routes
+router.use(protect);
 
 // GET /api/v1/tasks
 router.get('/', taskController.getTasks);

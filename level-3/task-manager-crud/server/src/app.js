@@ -29,9 +29,11 @@ if (process.env.NODE_ENV === 'development') {
 app.use(express.json());
 // Import Routes
 const taskRoutes = require('./routes/task.routes');
+const authRoutes = require('./routes/auth.routes');
 
 // Routes
 app.use('/api/v1/tasks', taskRoutes);
+app.use('/api/v1/auth', authRoutes);
 
 // Health Check Route
 app.get('/api/health', (req, res) => {

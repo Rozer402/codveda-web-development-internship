@@ -10,25 +10,25 @@ class TaskController {
   
   // GET /api/v1/tasks
   getTasks = asyncHandler(async (req, res) => {
-    const tasks = await taskService.getAllTasks();
+    const tasks = await taskService.getAllTasks(req.user.id);
     res.status(200).json(new ApiResponse(200, tasks, 'Tasks retrieved successfully'));
   });
 
   // POST /api/v1/tasks
   createTask = asyncHandler(async (req, res) => {
-    const task = await taskService.createTask(req.body);
+    const task = await taskService.createTask(req.body, req.user.id);
     res.status(201).json(new ApiResponse(201, task, 'Task created successfully'));
   });
 
   // PUT /api/v1/tasks/:id
   updateTask = asyncHandler(async (req, res) => {
-    const task = await taskService.updateTask(req.params.id, req.body);
+    const task = await taskService.updateTask(req.params.id, req.body, req.user.id);
     res.status(200).json(new ApiResponse(200, task, 'Task updated successfully'));
   });
 
   // DELETE /api/v1/tasks/:id
   deleteTask = asyncHandler(async (req, res) => {
-    await taskService.deleteTask(req.params.id);
+    await taskService.deleteTask(req.params.id, req.user.id);
     res.status(200).json(new ApiResponse(200, null, 'Task deleted successfully'));
   });
 }

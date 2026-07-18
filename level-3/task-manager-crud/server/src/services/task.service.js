@@ -8,18 +8,20 @@ const ApiError = require('../errors/ApiError');
 class TaskService {
   /**
    * Get all tasks, sorted by latest first
+   * @param {string} userId
    * @returns {Promise<Array>} List of tasks
    */
-  async getAllTasks() {
-    return await Task.find().sort({ createdAt: -1 });
+  async getAllTasks(userId) {
+    return await Task.find({ user: userId }).sort({ createdAt: -1 });
   }
 
   /**
    * Create a new task
    * @param {Object} taskData 
+   * @param {string} userId
    * @returns {Promise<Object>} Created task
    */
-  async createTask(taskData) {
+  async createTask(taskData, userId) {
     const { title, completed } = taskData;
     
     if (!title) {
@@ -29,6 +31,7 @@ class TaskService {
     const task = new Task({
       title,
       completed: completed || false,
+      user: userId
     });
 
     return await task.save();
@@ -37,10 +40,11 @@ class TaskService {
   /**
    * Get a task by ID
    * @param {string} id 
+   * @param {string} userId
    * @returns {Promise<Object>} Task
    */
-  async getTaskById(id) {
-    const task = await Task.findById(id);
+  async getTaskById(id, userId) {
+    const task = await Task.findOne({ _id: id, user: userId });
     if (!task) {
       throw new ApiError(404, 'Task not found');
     }
@@ -51,11 +55,12 @@ class TaskService {
    * Update a task
    * @param {string} id 
    * @param {Object} updateData 
+   * @param {string} userId
    * @returns {Promise<Object>} Updated task
    */
-  async updateTask(id, updateData) {
-    const task = await Task.findByIdAndUpdate(
-      id,
+  async updateTask(id, updateData, userId) {
+    const task = await Task.findOneAndUpdate(
+      { _id: id, user: userId },
       { $set: updateData },
       { new: true, runValidators: true }
     );
@@ -70,10 +75,11 @@ class TaskService {
   /**
    * Delete a task
    * @param {string} id 
+   * @param {string} userId
    * @returns {Promise<Object>} Deleted task info
    */
-  async deleteTask(id) {
-    const task = await Task.findByIdAndDelete(id);
+  async deleteTask(id, userId) {
+    const task = await Task.findOneAndDelete({ _id: id, user: userId });
     if (!task) {
       throw new ApiError(404, 'Task not found');
     }

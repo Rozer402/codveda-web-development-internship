@@ -3,7 +3,6 @@ import Header from '../components/Header';
 import TaskForm from '../components/TaskForm';
 import TaskList from '../components/TaskList';
 import Footer from '../components/Footer';
-import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorMessage from '../components/ErrorMessage';
 import ConfirmDialog from '../components/ConfirmDialog';
 import useTasks from '../hooks/useTasks';
@@ -95,7 +94,7 @@ export function Home() {
           />
           
           <div className="list-wrapper" style={{ position: 'relative' }}>
-            {loading && <LoadingSpinner />}
+            {loading && <div style={{ textAlign: 'center', padding: '1rem', fontWeight: 'bold' }}>{loading}</div>}
             <TaskList 
               tasks={tasks}
               onEdit={setEditingTask}

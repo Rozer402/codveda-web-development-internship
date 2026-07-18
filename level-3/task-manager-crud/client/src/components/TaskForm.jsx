@@ -10,26 +10,26 @@ import React, { useState, useEffect } from 'react';
  * @param {Function} props.onCancelEdit - Function to cancel editing mode
  */
 export function TaskForm({ editingTask, onSaveTask, onUpdateTask, onCancelEdit }) {
-  const [todoText, setTodoText] = useState('');
+  const [titleText, setTitleText] = useState('');
 
   // Populate form input fields when an existing task is selected for editing
   useEffect(() => {
     if (editingTask) {
-      setTodoText(editingTask.todo || '');
+      setTitleText(editingTask.title || '');
     } else {
-      setTodoText('');
+      setTitleText('');
     }
   }, [editingTask]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!todoText.trim()) return;
+    if (!titleText.trim()) return;
 
     if (editingTask) {
-      onUpdateTask(editingTask.id, { todo: todoText.trim() });
+      onUpdateTask(editingTask.id, { title: titleText.trim() });
     } else {
-      onSaveTask(todoText.trim());
-      setTodoText('');
+      onSaveTask(titleText.trim());
+      setTitleText('');
     }
   };
 
@@ -46,8 +46,8 @@ export function TaskForm({ editingTask, onSaveTask, onUpdateTask, onCancelEdit }
           id="task-title"
           type="text" 
           placeholder="What needs to be done?"
-          value={todoText}
-          onChange={(e) => setTodoText(e.target.value)}
+          value={titleText}
+          onChange={(e) => setTitleText(e.target.value)}
           required
           autoFocus={!!editingTask}
         />
