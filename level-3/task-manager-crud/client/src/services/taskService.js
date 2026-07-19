@@ -5,7 +5,7 @@ import axios from 'axios';
  * Service for communicating with Local Backend API for CRUD operations.
  */
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1/tasks';
+const API_BASE_URL = `${import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1'}/tasks`;
 
 const getAuthHeaders = () => {
   const token = localStorage.getItem('token');
